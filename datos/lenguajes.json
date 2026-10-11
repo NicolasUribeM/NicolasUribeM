@@ -1,0 +1,14 @@
+{
+ "actualizado": "2026-10-11",
+ "repos": 11,
+ "privados": 9,
+ "bytes": {
+  "TypeScript": 3344390,
+  "JavaScript": 176745,
+  "CSS": 118530,
+  "PLpgSQL": 80605,
+  "Python": 68515,
+  "PowerShell": 30187,
+  "HTML": 26923
+ }
+}

@@ -1,0 +1,50 @@
+name: Actualizar perfil
+
+# Regenera contribuciones.svg y numeros.svg con los datos del día.
+# El retrato no pasa por aquí: solo cambia cuando cambia la foto.
+
+on:
+  schedule:
+    - cron: "17 5 * * *" # 00:17 en Colombia
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: actualizar-perfil
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Traer datos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Opcional. Sin él, los lenguajes se quedan como están (ver obtener_datos.py).
+          PERFIL_TOKEN: ${{ secrets.PERFIL_TOKEN }}
+        run: python scripts/obtener_datos.py
+
+      - name: Dibujar tarjetas
+        run: |
+          python scripts/render_heatmap.py
+          python scripts/render_stats.py
+
+      - name: Publicar si algo cambió
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datos/ contribuciones.svg contribuciones.es.svg numeros.svg numeros.es.svg
+          if git diff --cached --quiet; then
+            echo "Sin cambios."
+          else
+            git commit -m "Tarjetas del perfil al $(date -u +%F)"
+            git push
+          fi
