@@ -1,6 +1,6 @@
 {
  "usuario": "NicolasUribeM",
- "actualizado": "2026-10-25",
+ "actualizado": "2026-10-26",
  "total": 391,
  "dias": [
   {
@@ -1461,6 +1461,10 @@
   },
   {
    "fecha": "2026-10-25",
+   "n": 0
+  },
+  {
+   "fecha": "2026-10-26",
    "n": 0
   }
  ]
